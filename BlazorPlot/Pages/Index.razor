@@ -1,0 +1,24 @@
+﻿@page "/"
+@inject BabylonEngine Engine
+
+<input type="number" value="@axisLength" @onchange="OnAxisLengthChange">
+<canvas id="plot" style="width: 100%; height: 100%"></canvas>
+
+@code{
+    private int axisLength = 10;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Engine.Initialize("plot");
+            await Engine.DrawAxis(axisLength);
+            await Engine.DrawSampleCurve();
+        }
+    }
+
+    private async Task OnAxisLengthChange(ChangeEventArgs args)
+    {
+        axisLength = int.Parse(args.Value.ToString());
+        await Engine.DrawAxis(axisLength);
+    }
+}
